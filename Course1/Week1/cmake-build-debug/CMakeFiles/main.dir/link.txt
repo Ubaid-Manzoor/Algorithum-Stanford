@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/main.dir/KaratsubaMul.cpp.o  -o main 
