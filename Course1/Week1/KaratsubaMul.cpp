@@ -17,7 +17,7 @@ using std::string;
 using std::stringstream;
 using std::to_string;
 
-string append_to_start(int length, string rhs){
+inline string append_to_start(int length, string rhs){
     string zeros(length, '0');
     return zeros.append(rhs);
 }
@@ -37,7 +37,6 @@ string add(string a, string b){
         size_of_a = size_of_b;
     }
 
-//    cout<<a<<" : "<<b<<endl;
     /* Now Start Adding  */
     int carry = 0;
     for(int i = size_of_a-1 ; i >= 0 ; --i ){
@@ -49,8 +48,6 @@ string add(string a, string b){
         int num2 = b[i] - '0';
         int sum = num1 + num2 + carry;
 
-//        cout<<"num1 : "<<num1 << " num2 : "<<num2<<endl;
-//        cout<<"sum : "<<sum<<" carry : "<<carry<<endl;
         if( sum <= 9 ){
             result.insert(0, to_string(sum) );
             carry = 0;
@@ -58,6 +55,10 @@ string add(string a, string b){
             result.insert(0, to_string(sum % 10) );
             carry = 1;
         }
+    }
+
+    if(carry){
+        result.insert(0, to_string(carry));
     }
     return result;
 }
@@ -76,7 +77,6 @@ string sub(string a, string b){
     /* Append Zero to the start of b */
     b = append_to_start(size_diff, b);
 
-//    cout<<a<<" : "<<b<<endl;
     /* Now Start Subtracting  */
     int borrow = 0;
     for(int i = size_of_a-1 ; i >= 0 ; --i ){
@@ -88,11 +88,9 @@ string sub(string a, string b){
         int num2 = b[i] - '0';
         int sub;
 
-//        cout<<"1 : "<<num1<<" , 2 : "<<num2<<endl;
 
         if( (num1 < num2) || ( (num1 == num2) && borrow ) ){
             sub = (10 + num1 - borrow) - num2;
-//            cout<<"sub : "<<sub<<endl;
             borrow = 1;
         }else{
             sub = num1 - borrow - num2;
@@ -120,9 +118,9 @@ string karatsubaMultiply(string num1, string num2){
     /* Prepossessing */
 
     if(num1.length() < num2.length()){
-        append_to_start(num2.length() - num1.length(), num1);
+        num1 = append_to_start(num2.length() - num1.length(), num1);
     }else{
-        append_to_start(num1.length() - num2.length(), num2);
+        num2 = append_to_start(num1.length() - num2.length(), num2);
     }
 
     unsigned int mid_of_num1 = num1.length()/2;
@@ -133,13 +131,11 @@ string karatsubaMultiply(string num1, string num2){
     string c = num2.substr(0,mid_of_num2);
     string d = num2.substr(mid_of_num2, num2.size()-mid_of_num2);
 
-    cout<<"a : "<<a<<",b : "<<b<<endl;
-    cout<<"c : "<<c<<",d : "<<d<<endl;
-
 
     /* Recursion Calls */
     // STEP 1
     string ac = karatsubaMultiply(a,c); // --> 1
+
     // STEP 2
     string bd = karatsubaMultiply(b, d); // --> 2
 
@@ -163,18 +159,26 @@ string karatsubaMultiply(string num1, string num2){
      * we can have simplified it but it might give some idea
      * what actually we are padding
      * */
-    ac.append(b.length() + d.length(), '0');
+    if(ac != "0"){ //  If Left side is zero there is no need to append more Zeros
+        ac.append(b.length() + d.length(), '0');
+    }
     ad_plus_bc.append( std::max( b.length(),d.length()) , '0' );
 
     return add(add(ac,ad_plus_bc),bd);
 }
 
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+
+/*
+ * Function For Testing add(), sub() and karatsubaMul()
+ * */
 void testAdd(int limit){
     int fails = 0;
     for(int i = 0 ; i < limit ; ++i){
         for(int j = 0 ; j < limit ; ++j){
             if( to_string(i + j) != add( to_string(i), to_string(j) ) ){
-                cout<<i<<", "<<j<<" == "<<(i+j)<<" return : "<<add(to_string(i), to_string(j))<<endl;
+                cout<<i<<", "<<j<<" == "<<(i+j)<<" return : "<<add(to_string(i), to_string(j))<<"*"<<endl;
                 fails += 1;
             }else{
                 cout<<i<<", "<<j<<" == "<<(i+j)<<" return : "<<add(to_string(i), to_string(j))<<endl;
@@ -190,7 +194,7 @@ void testSub(int limit){
     for(int i = 5999 ; i <= 5999 ; ++i){
         for(int j = 0 ; j < limit ; ++j){
             if( to_string(i - j) != sub( to_string(i), to_string(j) ) ){
-                cout<<i<<", "<<j<<" == "<<(i-j)<<" return : "<<sub(to_string(i), to_string(j))<<endl;
+                cout<<i<<", "<<j<<" == "<<(i-j)<<" return : "<<sub(to_string(i), to_string(j))<<"*"<<endl;
                 fails += 1;
             }else{
                 cout<<i<<", "<<j<<" == "<<(i-j)<<" return : "<<sub(to_string(i), to_string(j))<<endl;
@@ -200,21 +204,29 @@ void testSub(int limit){
     cout<<fails<<endl;
 }
 
+void testKaratsuba(int start, int limit){
+    int fails = 0;
+    for(int i = start   ; i <= limit ; ++i){
+        for(int j = start ; j < limit ; ++j){
+            if( to_string(i * j) != karatsubaMultiply( to_string(i), to_string(j) ) ){
+                cout<<i<<", "<<j<<" == "<<(i*j)<<" return : "<<karatsubaMultiply(to_string(i), to_string(j))<<"*"<<endl;
+                fails += 1;
+            }else{
+                cout<<i<<", "<<j<<" == "<<(i*j)<<" return : "<<karatsubaMultiply(to_string(i), to_string(j))<<endl;
+            }
+        }
+    }
+    cout<<fails<<endl;
+}
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+
+
 int main(){
-//    string num1{},num2{};
-//    num1 = "1";
-//    num2 = "2718281828459045235360287471352662497757247093699959574966967627";
-//    string result = karatsubaMultiply(num1,num2);
-//    cout<<"Result : "<<result<<endl;
-      testAdd(10);
-//        testSub(5998);
-//    cout<<to_string(10)<<endl;
+    string num1{},num2{};
+    num1 = "3141592653589793238462643383279502884197169399375105820974944592";
+    num2 = "2718281828459045235360287471352662497757247093699959574966967627";
+    string result = karatsubaMultiply(num1,num2);
+    cout<<"Result : "<<result<<endl;
     return 0;
 }
-
-
-/*
- * Problem is with add
- * check 1 + 9 ??
- *
- * */
