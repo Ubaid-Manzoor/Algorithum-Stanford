@@ -21,7 +21,7 @@ void readFile(string path,vector<int> &fileOut){
 
 vector<int> merge(vector<int> left, vector<int> right,long int& count){
     vector<int> merge;
-    merge.resize(left.size()+right.size(),100);
+    merge.resize(left.size()+right.size());
 
     for(int index=0,i=0,j=0 ; index < merge.size() ; index++){
         if(i < left.size() && j < right.size()){
