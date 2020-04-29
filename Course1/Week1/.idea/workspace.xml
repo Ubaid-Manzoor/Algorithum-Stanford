@@ -11,7 +11,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d70149cf-5397-4f08-8f8c-0079933e13b9" name="Default Changelist" comment="" />
+    <list default="true" id="d70149cf-5397-4f08-8f8c-0079933e13b9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,6 +71,8 @@
       <workItem from="1586941070349" duration="6378000" />
       <workItem from="1587015307232" duration="17049000" />
       <workItem from="1587102382683" duration="3609000" />
+      <workItem from="1587672686827" duration="17000" />
+      <workItem from="1587731662054" duration="184000" />
     </task>
     <servers />
   </component>
@@ -120,10 +124,11 @@
       <screen x="0" y="339" width="1366" height="741" />
     </state>
     <state width="1320" height="336" key="GridCell.Tab.1.right/0.339.1366.741/1366.0.1680.1050/3046.0.1024.768@0.339.1366.741" timestamp="1587115289588" />
-    <state x="339" y="537" key="com.intellij.ide.util.TipDialog" timestamp="1587015321501">
+    <state x="339" y="537" key="com.intellij.ide.util.TipDialog" timestamp="1587731660839">
       <screen x="0" y="339" width="1366" height="741" />
     </state>
-    <state x="339" y="537" key="com.intellij.ide.util.TipDialog/0.339.1366.741/1366.0.1680.1050/3046.0.1024.768@0.339.1366.741" timestamp="1587015321501" />
+    <state x="339" y="225" key="com.intellij.ide.util.TipDialog/0.27.1366.741@0.27.1366.741" timestamp="1587672686903" />
+    <state x="339" y="537" key="com.intellij.ide.util.TipDialog/0.339.1366.741/1366.0.1680.1050/3046.0.1024.768@0.339.1366.741" timestamp="1587731660839" />
     <state x="347" y="330" key="run.anything.popup" timestamp="1586941273047">
       <screen x="0" y="339" width="1366" height="741" />
     </state>
