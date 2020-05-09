@@ -91,68 +91,120 @@ void readFile(string path, unordered_map<int,list<int>> &graph, vector<Edge> &Ed
 
 /****************************************************************************************/
 
+void replaceEdge(vector<Edge> &Edges,char toCheck, int toReplace, int replaceWith){
+//    cout<<"----------------------------------------"<<endl;
+    for(Edge &edge:Edges){
+//        cout<<"("<<edge.start<<","<<edge.end<<")"<<endl;
+        if(toCheck == 'l'){
+            if(edge.start == toReplace){
+                edge.start = replaceWith;
+            }
+        }if(toCheck == 'r'){
+//            cout<<"Found"<<endl;
+            if(edge.end == toReplace){
+//                cout<<"Toreplace"<<endl;
+                edge.end = replaceWith;
+            }
+        }
+    }
+//    cout<<"----------------------------------------"<<endl;
+}
 
-void mergeEdge(unordered_map<int, list<int>> &graph, Edge randomEdge){
+void removeLoop(vector<Edge> &Edges, int left, int right){
+    for(Edge &edge: Edges){
+        if(edge.start == left){
+            edge.end == right;
+        }
+    }
+}
+
+void mergeEdge(unordered_map<int, list<int>> &graph, Edge randomEdge, vector<Edge> &Edges){
     int startNode = randomEdge.start;
     int endNode = randomEdge.end;
     list<int> listOfNodes = graph[endNode];
 
     /*
-        First replace all node attached to endNode with startNode
-        Because we have to deleted the endNode
+     * STEP 1:
+     * Detach all node attached to endNode and attach them to startNode
+     *  Because we have to deleted the endNode
     */
     for(int node:listOfNodes){
         list<int> &nodes = graph[node];
         replace(nodes.begin(),nodes.end(),endNode,startNode);
     }
 
+
+    replaceEdge(Edges,'r',endNode,startNode);
+
     /*
-        Stick the nodes attached with endNode to startNode in graph
+     * STEP 2:
+     * Stick the nodes attached with endNode to startNode in graph
     */
     list<int> &startNodes = graph[startNode];
     startNodes.splice(startNodes.end(),graph[endNode]);
 
-    /*
-        Now delete endNode in Nodes of StartNode and Loops
-    */
-    startNodes.remove(startNode);
-    startNodes.remove(endNode);
+    replaceEdge(Edges, 'l', endNode, startNode);
 
+    /*
+     * STEP 3:
+     * Now delete endNode from the nodes attached to StartNode and also Loops
+    */
+    startNodes.remove(startNode); // LOOPS
+    startNodes.remove(endNode); // DELETE ENDNODE
+    graph.erase(endNode);
+
+    removeLoop(Edges, startNode, endNode);
+}
+
+void removeEdge(vector<Edge> &Edges, int start, int end){
+    for(int i = 0 ; i < Edges.size() ; i++){
+        Edge edge = Edges[i];
+//        cout<<"("<<edge.start<<","<<edge.end<<")"<<endl;
+        if( (edge.start == start && edge.end == end) || (edge.end == start && edge.start == end)){
+//            cout<<"Found"<<endl;
+            Edges.erase(Edges.begin() + i);
+        }
+    }
 }
 
 
 Edge pickEdge(vector<Edge> &edges){
     srand(time(0));
-    int edgeIndex = rand() % edges.size();
-    Edge edge = edges[edgeIndex];
-    edges.erase(edges.begin()+edgeIndex);
-    return edge;
+    return edges[rand() % edges.size()];
 }
 
 int MinCut(unordered_map<int, list<int>> &graph, vector<Edge> &Edges){
-    while(Edges.size() > 2){
+    while(graph.size() > 2){
         Edge randomEdge = pickEdge(Edges);
+        removeEdge(Edges, randomEdge.start, randomEdge.end);
+//        cout<<"********************"<<endl;
+//        cout<<"("<<randomEdge.start<<","<<randomEdge.end<<")"<<endl<<endl;
+//        printEdges(Edges);
 //        cout<<"********************4"<<endl;
-//        cout<<Edges.size();
-//        cout<<"********************"<<endl;
-//        cout<<"("<<randomEdge.start<<","<<randomEdge.end<<")"<<endl;
-//        cout<<"********************"<<endl;
-        mergeEdge(graph,randomEdge);
+        mergeEdge(graph,randomEdge, Edges);
+//        cout<<graph.size()<<endl;
+        cout<<"-----------------------------------------------------------------------------------------"<<endl;
+        printMapOfVec(graph);
+//        break;
     }
 }
 
 int main()
 {
+//    string path="../mincut.txt";
     string path="../kargerMinCut.txt";
 
     unordered_map<int,list<int>> graph;
     vector<Edge> Edges;
     readFile(path,graph,Edges);
 //    cout<<"Size "<<Edges.size()<<endl;
+//    printEdges(Edges);
+//    cout<<"-----------------------"<<endl;
+//    printMapOfVec(graph);
     MinCut(graph,Edges);
+//    cout<<"-----------------"<<endl;
+//    printMapOfVec(graph);
 //    pickEdge(Edges);
-    printEdges(Edges);
-    printMapOfVec(graph);
 
     return 0;
 }
