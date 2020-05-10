@@ -163,8 +163,6 @@ void mergeEdge(unordered_map<int, list<int>> &graph, Edge randomEdge, vector<Edg
     removeLoop(Edges, startNode);
 }
 
-int seed = 0;
-
 Edge pickEdge(vector<Edge> &edges){
     random_device rd;
     mt19937 mt(rd());
