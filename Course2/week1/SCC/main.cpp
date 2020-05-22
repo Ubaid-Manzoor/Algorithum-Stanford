@@ -35,11 +35,8 @@ void printMap(const unordered_map<int,int> map){
 
 void printComponents(const unordered_map<int,unordered_set<int>> Components){
     for(pair<int,unordered_set<int>> component:Components){
-        cout<<"COMPONENT SIZE "<<component.second.size()<<endl;
-        for(int vertex:component.second){
-            cout<<vertex<<",";
-        }
-        cout<<endl;
+        if(component.second.size() > 200)
+            cout<<"COMPONENT SIZE "<<component.second.size()<<endl;
     }
 }
 
@@ -74,7 +71,7 @@ void readFile(string path, unordered_map<int, list<int>> &graph, unordered_map<i
 }
 
 namespace{
-    int tim=-1;
+    int tim=0;
     int leader=NULL;
     unordered_set<int> explored;
     unordered_map<int,int> finishingTime;
@@ -96,10 +93,6 @@ void DFS(const unordered_map<int, list<int>> &graph, int vertex){
     }
     if(reverseDFS){
         tim++;
-
-        if(tim == 0){
-            cout<<"VERTEX :  "<<vertex<<endl;
-        }
         finishingTime[tim] = vertex;
     }else{
         Components[leader].emplace(vertex);
@@ -108,19 +101,20 @@ void DFS(const unordered_map<int, list<int>> &graph, int vertex){
 
 
 void DFS_Loop(const unordered_map<int, list<int>> &graph){
-    if(!reverseDFS){
-        count++;
-        cout<<count<<endl;
-    }
     for(int i = graph.size(); i > 0 ; i--){
-        if(!reverseDFS){
-            i = finishingTime[i];
+        int node;
+        if(reverseDFS){
+            node = i;
+        }else{
+            node = finishingTime[i];
         }
-        if(explored.find(i) == explored.end()){
-            leader = i;
+        if(explored.find(node) == explored.end()){
+
+            leader = node;
+
             if(!reverseDFS)
                 Components[leader] = (unordered_set<int>());
-            DFS(graph, i);
+            DFS(graph, node);
         }
     }
 }
@@ -129,35 +123,23 @@ void searchSCC(const unordered_map<int,list<int>> &graph, const unordered_map<in
     reverseDFS = true;
     DFS_Loop(reverseGraph);
 
-    cout<<"First Done"<<endl;
-
     explored.clear();
 
     reverseDFS = false;
-    printMap(finishingTime);
-    count=0;
-    DFS_Loop(graph);
 
-    cout<<"Second Done"<<endl;
+    DFS_Loop(graph);
 }
 
 
 int main()
 {
 //    string path = "../smallSCC1.txt";
+//    string path = "../smallSCC.txt";
     string path = "../SCC.txt";
     unordered_map<int, list<int>> graph;
     unordered_map<int, list<int>> reverseGraph;
     readFile(path, graph, reverseGraph);
-    printMapOfList(graph);
-    cout<<"===================="<<endl;
-    printMapOfList(reverseGraph);
-//    cout<<"GRAPG SIZE : "<<graph.size()<<endl;
-//    cout<<"REVERSE SIZE : "<<reverseGraph.size()<<endl;;
-//    cout<<"READING DONE"<<endl;
     searchSCC(graph,reverseGraph);
-//    cout<<"SIZE : "<<finishingTime.size()<<endl;
-//    printMap(finishingTime);
     cout<<"Com Size : "<<Components.size()<<endl;
     printComponents(Components);
     return 0;
