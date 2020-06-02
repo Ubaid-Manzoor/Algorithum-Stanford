@@ -1,3 +1,0 @@
-/home/ubaid/Desktop/AlgorithumStanford/Course2/week2/MinHeap/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/ubaid/Desktop/AlgorithumStanford/Course2/week2/MinHeap/cmake-build-debug/CMakeFiles/MinHeap.dir
-/home/ubaid/Desktop/AlgorithumStanford/Course2/week2/MinHeap/cmake-build-debug/CMakeFiles/edit_cache.dir
