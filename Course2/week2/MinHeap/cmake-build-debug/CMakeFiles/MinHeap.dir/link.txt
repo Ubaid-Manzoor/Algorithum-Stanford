@@ -1,0 +1,2 @@
+/usr/bin/ar qc libMinHeap.a  CMakeFiles/MinHeap.dir/library.cpp.o
+/usr/bin/ranlib libMinHeap.a
