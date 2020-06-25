@@ -9,6 +9,7 @@
 /**
  * JUST CHANGE DIVISION TO SUBTRACT IN LINE 30 FOR THE FIRST PROBLEM
  */
+
 using namespace std;
 
 void printVec(vector<tuple<int,int,float>> jobs){
@@ -41,7 +42,7 @@ bool compare(tuple<int,int,float> job1, tuple<int,int,float> job2){
 
 long int jobScheduling(vector<tuple<int,int,float>> jobs){
     sort(jobs.begin(), jobs.end(), compare);
-    printVec(jobs);
+
     // Sum of Weighted Completion Times
     int completion_time = 0;
     long int weighted_Sum = 0;
