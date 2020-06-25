@@ -93,24 +93,30 @@ int prims_mst(const unordered_map<int, vector<Node>> &graph){
 
     int starting_vertex = *vertices.begin();
     unordered_set<int> X;
-    vector<tuple<int,int,int>> spanning_tree;
+    unordered_map<int,pair<int,int>> spanning_edges; /// Contains all the Edges in Minimum spanning Tree
 
     Heap.UpdateHeapAt(starting_vertex,0);
-    int sum=0;
-
+    
     while(!Heap.isempty()){
         pair<int,int> node = Heap.get_min();
-        sum += node.second;
         X.emplace(node.first);
 
         for(Node endVertex: graph.at(node.first)){
             if(X.find(endVertex.des) == X.end()){
-                Heap.UpdateHeapAt(endVertex.des,min(endVertex.weight,Heap.CurrentGreedyScoreOf(endVertex.des)));
+                if(endVertex.weight < Heap.CurrentGreedyScoreOf(endVertex.des)){
+                    Heap.UpdateHeapAt(endVertex.des,endVertex.weight);
+                    spanning_edges[endVertex.des] = make_pair(node.first,endVertex.weight);
+                }
+
             }
         }
     }
 
-    return sum;
+    int spanning_edge_sum = 0;
+    for(auto edge:spanning_edges){
+        spanning_edge_sum += edge.second.second;
+    }
+    return spanning_edge_sum;
 }
 
 
